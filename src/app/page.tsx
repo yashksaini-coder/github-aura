@@ -1,101 +1,113 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {  Star, GitFork, Users } from 'lucide-react'
+import { getUserProfile } from '@/actions'
+import { OctokitResponse } from "@octokit/types";
+import { User, UserResponse } from '@/utils/types'
+
+type GitHubUser = {
+  login: string
+  name: string
+  public_repos: number
+  avatar_url: string
+  followers: number
+  public_gists: number
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [username, setUsername] = useState('')
+  const [aura, setAura] = useState<number | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const calculateAura = (user: User) => {
+    // This is a simple calculation, you can make it more complex
+    return user.public_repos * 3 + user.followers * 2 + user.public_gists * 1
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    setAura(null)
+    setUser(null)
+
+    try {
+      const userData = await getUserProfile(username)
+      console.log(userData);
+      setUser(userData)
+      setAura(calculateAura(userData))
+    } catch (err) {
+      setError('Yo, that user doesn\'t exist or something went wrong!')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">GitHub Aura Vibe Check</CardTitle>
+          <CardDescription className="text-center">Enter a GitHub username to calculate their aura, fam!</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex space-x-2">
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="GitHub username"
+                className="flex-grow"
+              />
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Checking...' : 'Check Aura'}
+              </Button>
+            </div>
+          </form>
+
+          {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+
+          {user && aura !== null && (
+            <div className="mt-6 space-y-4">
+              <div className="flex items-center justify-center space-x-2">
+                <img src={user.avatar_url} alt={user.name} className="w-16 h-16 rounded-full" />
+                <div>
+                  <h2 className="text-xl font-semibold">{user.name}</h2>
+                  <p className="text-gray-500">@{user.login}</p>
+                </div>
+              </div>
+              <div className="bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-white text-center py-4 rounded-lg">
+                <p className="text-3xl font-bold">Aura Score: {aura}</p>
+                <p>That's {aura > 1000 ? 'legendary' : aura > 500 ? 'fire' : 'cool'}, bro!</p>
+              </div>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <GitFork className="mx-auto h-6 w-6 text-gray-400" />
+                  <p className="mt-1 font-semibold">{user.public_repos}</p>
+                  <p className="text-xs text-gray-500">Repos</p>
+                </div>
+                <div>
+                  <Users className="mx-auto h-6 w-6 text-gray-400" />
+                  <p className="mt-1 font-semibold">{user.followers}</p>
+                  <p className="text-xs text-gray-500">Followers</p>
+                </div>
+                <div>
+                  <Star className="mx-auto h-6 w-6 text-gray-400" />
+                  <p className="mt-1 font-semibold">{user.public_gists}</p>
+                  <p className="text-xs text-gray-500">Gists</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
-  );
+  )
 }
