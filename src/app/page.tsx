@@ -8,42 +8,42 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { fetchGitHubAura } from "@/actions";
-import { AuraParams, User } from "@/utils/types";
+import { AuraParams } from "@/utils/types";
 import { UsernameInput } from "@/components/username-input";
 import { AuraStats } from "@/components/aura-stats";
-import { calculateAuraScore } from "@/utils/aura-calculator";
-
-export async function getUserAura(username: string) {
-  const auraParams = await fetchGitHubAura(username);
-  const auraScore = calculateAuraScore(auraParams);
-  return { params: auraParams, score: auraScore };
-}
+import { useToast } from "@/hooks/use-toast";
+import { getUserAura } from "@/utils/aura-calculator";
 
 export default function Home() {
+  const { toast } = useToast();
   const [aura, setAura] = useState<{
     params: AuraParams;
     score: number;
   } | null>(null);
   const [username, setUsername] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (username: string) => {
-    setLoading(true);
-    setError("");
-    setAura(null);
-    setUsername(username);
-
     try {
+      setLoading(true);
+      setUsername(username);
       const aura = await getUserAura(username);
       setAura(aura);
     } catch (err) {
-      setError("Yo, that user doesn't exist or something went wrong!");
+      const error = err as Error;
+      toast({
+        title: "Error!",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">

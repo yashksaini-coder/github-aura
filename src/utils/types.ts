@@ -3,6 +3,7 @@ import { Endpoints } from "@octokit/types";
 export type User = Endpoints["GET /users/{username}"]["response"]["data"];
 export type Repos = Endpoints["GET /users/{username}/repos"]["response"]["data"];
 export type Issues = Endpoints["GET /search/issues"]["response"]["data"]["items"];
+export type Events = Endpoints["GET /users/{username}/events"]["response"];
 
 export type AuraParams = {
   repoCount: number;

@@ -1,7 +1,7 @@
 "use server";
 
 import { octokit } from "@/lib/octokit";
-import { AuraParams, Issues, Repos } from "@/utils/types";
+import { AuraParams, Events, Issues, Repos } from "@/utils/types";
 
 export async function getUserProfile(username: string) {
   const res = await octokit.request("GET /users/{username}", {
@@ -125,7 +125,7 @@ export async function fetchGitHubAura(username: string): Promise<AuraParams> {
   ).length;
 
   // Streaks using recent events
-  const events = await octokit.request("GET /users/{username}/events", {
+  const events: Events = await octokit.request("GET /users/{username}/events", {
     username,
     per_page: 100,
     headers: {
@@ -135,8 +135,10 @@ export async function fetchGitHubAura(username: string): Promise<AuraParams> {
 
   // Calculate streak based on recent events
   const eventDays = new Set();
-  events.data.forEach((event: any) => {
-    const date = new Date(event.created_at).toISOString().split("T")[0];
+  events.data.forEach((event) => {
+    const date = new Date(event.created_at ? event.created_at : "")
+      .toISOString()
+      .split("T")[0];
     eventDays.add(date);
   });
 

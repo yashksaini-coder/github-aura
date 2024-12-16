@@ -37,7 +37,7 @@ export const AuraStats = ({
   const topLanguages = Object.entries(auraParams.languages)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
-    .map(([lang, _]) => lang)
+    .map(([lang]) => lang)
     .join(", ");
 
   const shareOnTwitter = () => {

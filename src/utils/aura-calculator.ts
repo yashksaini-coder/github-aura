@@ -1,4 +1,12 @@
+import { fetchGitHubAura } from "@/actions";
 import { AuraParams } from "./types";
+
+export async function getUserAura(username: string) {
+  const auraParams = await fetchGitHubAura(username);
+  const auraScore = calculateAuraScore(auraParams);
+  return { params: auraParams, score: auraScore };
+}
+
 
 export function calculateAuraScore(params: AuraParams): number {
   // Base scores
