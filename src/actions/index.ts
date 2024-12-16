@@ -3,32 +3,6 @@
 import { octokit } from "@/lib/octokit";
 import { AuraParams, Events, Issues, Repos } from "@/utils/types";
 
-export async function getUserProfile(username: string) {
-  const res = await octokit.request("GET /users/{username}", {
-    username,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
-
-  const test = await getStats(username, "events/public");
-
-  console.log(test);
-
-  return res.data;
-}
-
-export async function getStats(username: string, stat: string) {
-  const res = await octokit.request(`GET /users/{username}/${stat}`, {
-    username,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
-
-  return res.data;
-}
-
 export async function fetchGitHubAura(username: string): Promise<AuraParams> {
   // Basic user info
   const userInfo = await octokit.request("GET /users/{username}", {
