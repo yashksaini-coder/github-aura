@@ -13,6 +13,8 @@ import { UsernameInput } from "@/components/username-input";
 import { AuraStats } from "@/components/aura-stats";
 import { useToast } from "@/hooks/use-toast";
 import { getUserAura } from "@/utils/aura-calculator";
+import { WaveLoader } from "@/components/wave-loader";
+import { LoadingMessages } from "@/components/loading-messages";
 
 export default function Home() {
   const { toast } = useToast();
@@ -42,7 +44,24 @@ export default function Home() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+        <WaveLoader />
+        <LoadingMessages />
+      </div>
+    );
+  }
+
+  if (username && aura) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <AuraStats
+          username={username}
+          auraParams={aura.params}
+          auraScore={aura.score}
+        />
+      </div>
+    );
   }
 
   return (
@@ -58,14 +77,6 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <UsernameInput onSubmit={handleSubmit} />
-
-          {username && aura !== null && (
-            <AuraStats
-              username={username}
-              auraParams={aura.params}
-              auraScore={aura.score}
-            />
-          )}
         </CardContent>
       </Card>
     </div>
