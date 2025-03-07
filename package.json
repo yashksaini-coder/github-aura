@@ -20,7 +20,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.451.0",
-    "next": "14.2.13",
+    "next": "^14.2.24",
     "octokit": "^4.0.2",
     "react": "^18",
     "react-dom": "^18",

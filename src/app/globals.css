@@ -12,6 +12,22 @@ body {
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Subtle background pattern */
+.bg-pattern {
+  background-image: 
+    radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.05) 2%, transparent 0%), 
+    radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.025) 2%, transparent 0%);
+  background-size: 100px 100px;
+}
 
 @layer base {
   :root {
