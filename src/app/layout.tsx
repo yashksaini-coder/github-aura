@@ -16,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "GitHub Aura",
-  description: "Discover your GitHub Aura Score - where your code meets karm",
+  description: "Discover your GitHub Aura Score - where your code meets karma",
 };
 
 export default function RootLayout({
