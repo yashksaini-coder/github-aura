@@ -7,38 +7,38 @@ export async function getUserAura(username: string) {
   return { params: auraParams, score: auraScore };
 }
 
-
 export function calculateAuraScore(params: AuraParams): number {
-  // Base scores
-  const repoScore = Math.min(params.repoCount * 2, 20); // Max 20 points
+  // Base scores with better scaling for senior developers
+  const repoScore = Math.min(Math.log10(params.repoCount + 1) * 10, 20); // Max 20 points, logarithmic scale
 
   // Language diversity score (number of languages used)
-  const languageScore = Math.min(Object.keys(params.languages).length * 3, 15); // Max 15 points
+  const languageCount = Object.keys(params.languages).length;
+  const languageScore = Math.min(Math.log10(languageCount + 1) * 10, 15); // Max 15 points, logarithmic scale
 
-  // Social score
-  const followerScore = Math.min(Math.log10(params.followers + 1) * 5, 10); // Max 10 points
-  const followingScore = Math.min(Math.log10(params.following + 1) * 2, 5); // Max 5 points
+  // Social score with better logarithmic scaling
+  const followerScore = Math.min(Math.log10(params.followers + 1) * 5, 15); // Max 15 points, logarithmic scale
+  const followingScore = Math.min(Math.log10(params.following + 1) * 2, 5); // Max 5 points, logarithmic scale
 
-  // Activity scores
-  const gistScore = Math.min(params.gists, 5); // Max 5 points
-  const forkScore = Math.min(Math.log10(params.totalForks + 1) * 3, 10); // Max 10 points
-  const starScore = Math.min(Math.log10(params.totalStars + 1) * 4, 15); // Max 15 points
+  // Activity scores with better logarithmic scaling
+  const gistScore = Math.min(Math.log10(params.gists + 1) * 3, 5); // Max 5 points, logarithmic scale
+  const forkScore = Math.min(Math.log10(params.totalForks + 1) * 4, 10); // Max 10 points, logarithmic scale
+  const starScore = Math.min(Math.log10(params.totalStars + 1) * 5, 15); // Max 15 points, logarithmic scale
 
-  // Streak and contribution scores
-  const streakScore = Math.min(params.streak / 7, 10); // Max 10 points
+  // Streak and contribution scores with better scaling
+  const streakScore = Math.min(Math.log10(params.streak + 1) * 7, 10); // Max 10 points, logarithmic scale
   const contributionScore = Math.min(
-    Math.log10(params.contributionCount + 1) * 3,
+    Math.log10(params.contributionCount + 1) * 5,
     10,
-  ); // Max 10 points
+  ); // Max 10 points, logarithmic scale
 
-  // Issue and PR scores
-  const issueScore = Math.min(
-    (params.issuesOpened + params.issuesClosed) / 10,
-    10,
-  ); // Max 10 points
-  const prScore = Math.min((params.prsOpened + params.prsClosed) / 5, 15); // Max 15 points
+  // Issue and PR scores with better scaling for senior developers
+  const issueCount = params.issuesOpened + params.issuesClosed;
+  const prCount = params.prsOpened + params.prsClosed;
+  
+  const issueScore = Math.min(Math.log10(issueCount + 1) * 5, 10); // Max 10 points, logarithmic scale
+  const prScore = Math.min(Math.log10(prCount + 1) * 7, 15); // Max 15 points, logarithmic scale
 
-  // Calculate total (max possible: 125 points)
+  // Calculate total (max possible: 130 points)
   const totalScore =
     repoScore +
     languageScore +

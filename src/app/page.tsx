@@ -25,15 +25,18 @@ export default function Home() {
   } | null>(null);
   const [username, setUsername] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (username: string) => {
+  const fetchUserAura = async (username: string) => {
     try {
       setLoading(true);
+      setError(null);
       setUsername(username);
       const aura = await getUserAura(username);
       setAura(aura);
     } catch (err) {
       const error = err as Error;
+      setError(error.message);
       toast({
         title: "Error!",
         description: error.message,
@@ -44,11 +47,21 @@ export default function Home() {
     }
   };
 
+  const handleSubmit = async (username: string) => {
+    await fetchUserAura(username);
+  };
+
+  const handleRetry = async () => {
+    if (username) {
+      await fetchUserAura(username);
+    }
+  };
+
   const renderHeader = () => (
-    <header className="w-full max-w-4xl mx-auto py-4 sm:py-6 px-4">
+    <header className="w-full max-w-4xl mx-auto py-6 px-4">
       <div className="flex items-center justify-center gap-2">
-        <GitHubLogoIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-        <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+        <GitHubLogoIcon className="h-8 w-8" />
+        <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
           GitHub Aura Scanner
         </h1>
       </div>
@@ -56,7 +69,7 @@ export default function Home() {
   );
 
   const renderFooter = () => (
-    <footer className="w-full text-center py-3 sm:py-4 text-xs sm:text-sm text-gray-400">
+    <footer className="w-full text-center py-4 text-sm text-gray-400">
       <p>Made with 💫 for the GitHub community</p>
     </footer>
   );
@@ -78,11 +91,12 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black to-slate-900 flex flex-col">
         {renderHeader()}
-        <div className="flex-1 flex items-center justify-center p-2 sm:p-4">
+        <div className="flex-1 flex items-center justify-center p-4">
           <AuraStats
             username={username}
             auraParams={aura.params}
             auraScore={aura.score}
+            onRetry={handleRetry}
           />
         </div>
         {renderFooter()}
@@ -95,15 +109,15 @@ export default function Home() {
       {renderHeader()}
       <div className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md border-gray-800 bg-black/70 backdrop-blur-sm transition-all hover:shadow-md hover:shadow-purple-500/20 animate-fade-in">
-          <CardHeader className="px-4 sm:px-6">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
               GitHub Aura Check
             </CardTitle>
             <CardDescription className="text-center">
               Discover the vibes of any GitHub profile - enter a username below!
             </CardDescription>
           </CardHeader>
-          <CardContent className="px-4 sm:px-6">
+          <CardContent>
             <UsernameInput onSubmit={handleSubmit} />
           </CardContent>
         </Card>
