@@ -49,7 +49,7 @@ export function UsernameInput({
               <FormControl>
                 <Input 
                   placeholder="torvalds" 
-                  className="h-10 px-3 text-base" 
+                  className="h-10 px-3 text-base text-white" 
                   {...field} 
                 />
               </FormControl>
