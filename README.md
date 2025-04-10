@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+> [!IMPORTANT]
+>
+> NEXT.js web application that calculate aura score of a github user based on the data fetched from the API endpoint. 
 
-## Getting Started
+---
+<div align="center">
+    <h3>🚀 <a href="https://github-aura-six.vercel.app/">Live Demo</a> 🚀</h3>
+    <img align="center" src="./public/dashboard.png" alt="GitHub Aura" width="70%">
+</div>
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 🛠 Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com/)
+- [Octokit](https://octokit.github.io/rest.js/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| hkirat | yashksaini-coder |
+|----------|------------|
+| ![](./public/user2.png) | ![](./public/user1.png) |
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<a href="https://github.com/yashksaini-coder">
+    <table>
+        <tbody>
+            <tr>
+                <td align="left" valign="top" width="14.28%">
+                    <img src="https://github.com/yashksaini-coder.png?s=60" width="130px;"/>
+                    <br/>
+                    <h4 align="center">
+                        <b>Yash K. Saini</b>
+                    </h4>
+                    <div align="center">
+                        <p>(Author)</p>
+                    </div>
+                </td>
+                <td align="left" valign="top" width="85%">
+                    <p>
+                        👋 Hi there! I'm <u><em><strong>Yash K. Saini</strong></em></u>, a self-taught software developer and a computer science student from India.
+                    </p>
+                    <ul>
+                     <li>
+                        I love building & contributing to Open Source software solutions & projects that help solve real-world problems.
+                    </li>
+                    <li>
+                        I want to build products & systems that can benefit & solve problems for many other DEVs.
+                    </li>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</a>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<p align="center">
+    <strong>🌟 If you find this project helpful, please give it a star on GitHub! 🌟</strong>
+</p>
